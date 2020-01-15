@@ -3,6 +3,7 @@ package com.elar.watertanks.api;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,21 +23,34 @@ public class WaterTanksController {
 	@Autowired
 	private WaterTanksService waterTanksService;
 	
+	
 	@GetMapping("/queryMaxCapacity")
 	@ResponseStatus(HttpStatus.OK)
 	public BigDecimal queryMaxCapacity(@RequestParam(value = "tankId", required = true) Integer tankId) {
+		this.waterTanksService.validateTankId(tankId);
 		return this.waterTanksService.queryMaxCapacity(tankId);
 	}
+	
 	@GetMapping("/queryCurrentCapacity")
 	@ResponseStatus(HttpStatus.OK)
 	public BigDecimal queryCurrentCapacity(@RequestParam(value = "tankId", required = true) Integer tankId) {
+		this.waterTanksService.validateTankId(tankId);
 		return this.waterTanksService.queryCurrentCapacity(tankId);
 	}
 	
 	@PostMapping("/addWater")
 	@ResponseStatus(HttpStatus.OK)
 	public boolean addWater(@RequestParam(value = "tankId", required = true) Integer tankId, @RequestParam(value = "volume", required = true) BigDecimal volumeInLiters) {
+		this.waterTanksService.validateTankId(tankId);
 		return this.waterTanksService.addWater(tankId, volumeInLiters);
+	}
+	
+	@SuppressWarnings("serial")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public class TankNotFoundException extends RuntimeException {
+		public TankNotFoundException(String exception) {
+			super(exception);
+		}
 	}
 
 }

@@ -3,8 +3,11 @@ package com.elar.watertanks.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.elar.watertanks.api.WaterTanksController.TankNotFoundException;
 import com.elar.watertanks.model.WaterTank;
 
 @Service
@@ -62,4 +65,17 @@ public class WaterTanksServiceImpl implements WaterTanksService{
 	}
 
 
+	public void validateTankId(Integer tankId) {
+		if(tankId < 0 || tankId > getWaterTanks().size()) {
+			throw new TankNotFoundException("Tank not found. Tank id: " + tankId);
+		}
+	}
+	
+	@SuppressWarnings("serial")
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public class TankNotFoundException extends RuntimeException {
+		public TankNotFoundException(String exception) {
+			super(exception);
+		}
+	}
 }

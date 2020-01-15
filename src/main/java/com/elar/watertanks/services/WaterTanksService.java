@@ -14,5 +14,8 @@ public interface WaterTanksService {
 	public boolean addWater(Integer tankId, BigDecimal volumeInLiters);
 	
 	public void populateInitialData(List<WaterTank> waterTanks);
+	
+	public void validateTankId(Integer tankId) ;
+
 
 }
