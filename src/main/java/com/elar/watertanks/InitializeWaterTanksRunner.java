@@ -53,8 +53,10 @@ public class InitializeWaterTanksRunner implements CommandLineRunner{
 					synchronized (waterTank.getCurrentCapacity()){
 						BigDecimal currentCapacity = waterTank.getCurrentCapacity();
 				        //System.out.println("tank id: " + waterTank.getId() + " capacity: " + waterTank.getCurrentCapacity().toString());
-
-						if(currentCapacity != null && currentCapacity.compareTo(BigDecimal.ZERO) > 0) {
+						if(waterTank.getCurrentCapacity().subtract(leakPerSecond).compareTo(BigDecimal.ZERO) < 0) {
+							waterTank.setCurrentCapacity(BigDecimal.ZERO);
+						}
+						else if(currentCapacity != null && currentCapacity.compareTo(BigDecimal.ZERO) > 0) {							
 							waterTank.setCurrentCapacity(waterTank.getCurrentCapacity().subtract(leakPerSecond));
 					        //System.out.println("tank id: " + waterTank.getId() + " capacity: " + waterTank.getCurrentCapacity().toString());
 						}
